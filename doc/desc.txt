@@ -1,0 +1,7 @@
+*desc.txt*  Plugin to add descriptions to files (probably for personal use only).
+
+Author:  Julian Orchard <julianorchard.co.uk>
+License: Same terms as Vim itself (see |license|)
+
+
+
