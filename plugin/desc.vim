@@ -19,13 +19,6 @@
 			\ . "<cr>Desciption: DESCRIPTION<cr>-->"
 			\ . "<esc>/DESCRIPTION<cr>cw"
 	endfunction
-	function HashLine()
-		iab <expr> desc "" .
-			\       "# File:       " . filename 
-			\ . "<cr># Author:     " . author
-			\	. "<cr># Tag Added:  " . curtime
-			\ . "<cr># Desciption:"
-	endfunction
 	function CSSBlock()
 		iab <expr> desc "/*" . 
 			\   "<cr>File:       " . filename 
@@ -34,42 +27,17 @@
 			\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i*/"
 			\ . "<esc>/DESCRIPTION<cr>cw"
 	endfunction
-	function VIMLine() 
-		iab <expr> desc "" .
-			\       "\" File:       " . filename 
-			\ . "<cr>\" Author:     " . author
-			\	. "<cr>\" Tag Added:  " . curtime
-			\ . "<cr>\" Desciption:"
-	endfunction
-	function LispLine()
-		iab <expr> desc "" .
-			\       "\; File:       " . filename 
-			\ . "<cr>\; Author:     " . author
-			\	. "<cr>\; Tag Added:  " . curtime
-			\ . "<cr>\; Desciption:"
-	endfunction
-	function VBLine()
-		iab <expr> desc "" .
-			\       "\' File:       " . filename 
-			\ . "<cr>\' Author:     " . author
-			\	. "<cr>\' Tag Added:  " . curtime
-			\ . "<cr>\' Desciption:"
-	endfunction
-	function LUALine()
-		iab <expr> desc "" .
-			\       "-- File:       " . filename 
-			\ . "<cr>-- Author:     " . author
-			\	. "<cr>-- Tag Added:  " . curtime
-			\ . "<cr>-- Desciption:"
-	endfunction
-	function DOSLine()
-		iab <expr> desc "" .
-			\       ":: File:       " . filename 
-			\ . "<cr>:: Author:     " . author
-			\	. "<cr>:: Tag Added:  " . curtime
-			\ . "<cr>:: Desciption:"
+
+" 'Line' Comments
+	function! s:LineComment(comment)
+		iab <expr> desc a:comment." File:       " . filename 
+			   \ . "<cr>".a:comment." Author:     " . author
+			   \ . "<cr>".a:comment." Tag Added:  " . curtime
+			   \ . "<cr>".a:comment." Desciption:"
 	endfunction
 
+
+function! s:Main()
 
 " -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
@@ -88,31 +56,38 @@
 
 	" # These Style Comments
 		elseif (&ft=='sh' || &ft=='bash' || &ft=='python')
-			call HashLine()
-
+			call s:LineComment("#")
 	" " These Style Comments
 		elseif (&ft=='vim')
-			call VIMLine()
-
+			let comment="\""
+			call s:LineComment(comment)
 	" ; These Style Comments
 		elseif (&ft=='autohotkey' || &ft=='asm' || &ft=='lisp' || &ft=='clojure')
-			call LispLine()
-
+			let comment=";"
+			call s:LineComment(comment)
 	" ' These Style Comments
 		elseif (&ft=='vb')
-			call VBLine()
-
+			let comment="'"
+			call s:LineComment(comment)
 	" -- These Style Comments
 		elseif (&ft=='haskell' || &ft=='ada' || &ft=='eiffel' || &ft=='euphoria3' || &ft=='sql' || &ft=='applescript' || &ft=='lua')
-			call LuaLine()
-
+			let comment="--"
+			call s:LineComment(comment)
 	" :: These Style Comments
 		elseif (&ft=='dosbatch')
-			call DOSLine()
+			let comment="::"
+			call s:LineComment(comment)
 
 " -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
-" DEFAULT COMMENT (FROM FILE)
+" DEFAULT COMMENT (FROM FILE, eventually)
+		else 
+			let comment="~~"
+			call s:LineComment(comment)
 
 	endif
 
 " -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+
+endfunction
+
+autocmd BufNewFile,BufRead * call s:LineComment()
