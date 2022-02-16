@@ -5,11 +5,11 @@
 "  Desciption: Add a short comment block to files (this!)
 
 
-" Method taken from the very clean 
-" commentary.vim plugin! https://github.com/tpope/vim-commentary
+" Method inspired by commentary.vim 
+" https://github.com/tpope/vim-commentary
 	function! s:comments() abort
-		return split(get(b:, 'commentary_format', substitute(substitute(substitute(
-			\ &commentstring, '^$', '%s', ''), '\S\zs%s',' %s', ''), '%s\ze\S', '%s ', '')), '%s', 1)
+		return split(get(b:, 'commentary_format', 
+					\ &commentstring), '%s', 1)
 	endfunction
 
 " Write Block Comment Style
@@ -18,7 +18,7 @@
 			iab <expr> desc l . 
 				\   "<cr>File:       " . filename 
 				\ . "<cr>Author:     " . author
-				\	. "<cr>Tag Added:  " . curtime
+				\	. "<cr>Tag Added:  " . datestr
 				\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 				\ . "<esc>/DESCRIPTION<cr>cw"
 	endfunction
@@ -28,15 +28,27 @@
 		let [l,r] = [a:l, a:r]
 			iab <expr> desc l." File:       " . filename 
 			     \ . "<cr>".l." Author:     " . author
-			     \ . "<cr>".l." Tag Added:  " . curtime
+			     \ . "<cr>".l." Tag Added:  " . datestr
 			     \ . "<cr>".l." Desciption:"
 	endfunction
 
 " Author from a config file, eventually
 " Update curtime to override with a BufSave?
 	let filename = expand('%:t')
-	let author  = "Julian Orchard [hello@julianorchard.co.uk]"
-	let curtime = strftime("%Y-%m-%d")
+" Author
+	if exists('g:desc_author') 
+		let author = get(g:, 'desc_author')
+	else 
+		"default
+		let author = "Placeholder [example@placeholder.com]"
+	endif
+" Date Format
+	if exists('g:desc_dateformat')
+		let datestr = strftime(get(g:, 'desc_dateformat'))
+	else
+		"default
+		let datestr = strftime("%Y-%m-%d")
+	endif
 
 	let [l,r] = s:comments()
 	if len(r) != 0 
