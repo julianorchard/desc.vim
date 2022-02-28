@@ -6,7 +6,7 @@ started. Output roughly looks like this by default:
 ```
 <!-- 
 	File:       test.html
-	Author:     Julian Orchard [hello@julianorchard.co.uk]
+	Author:     Julian Orchard <hello@julianorchard.co.uk>
 	Tag Added:  2022-02-16
 	Desciption: Example of a file description.
 -->
@@ -16,7 +16,7 @@ And, as an example of a single line comment style block of description...
 
 ```
 # File:       test.sh
-# Author:     Julian Orchard [hello@julianorchard.co.uk]
+# Author:     Julian Orchard <hello@julianorchard.co.uk>
 # Tag Added:  2022-02-16
 # Desciption: Another example, this time using line comments.
 ```
@@ -41,7 +41,7 @@ You'll want to use your own name as the Author (I assume). To do so, add a line
 in your `.vimrc` file like this:
 
 ```
-	let g:desc_author = "Your Name [example@email.com]"
+	let g:desc_author = "Your Name <example@email.com>"
 ```
 
 ### Custom Date/Time

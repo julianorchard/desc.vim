@@ -40,7 +40,7 @@
 		let author = get(g:, 'desc_author')
 	else 
 		"default
-		let author = "Placeholder [example@placeholder.com]"
+		let author = "Placeholder <example@placeholder.com>"
 	endif
 " Date Format
 	if exists('g:desc_dateformat')
