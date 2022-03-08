@@ -28,27 +28,27 @@ this plugin operates.
 
 --DETAILS                                                   *desc.vim details*
   You will want to include your contact information
-	instead of the standard placeholder details. Set
-	the following variable in your main vim config
-	file like so: 
+  instead of the standard placeholder details. Set
+  the following variable in your main vim config
+  file like so: 
   > 
-	let g:desc_author = "Your Name <example@email.com>"
+  let g:desc_author = "Your Name <example@email.com>"
   <
 
 --DATE/TIME                                               *desc.vim date time*
   You can also change how the date/time is shown,
-	in a similar way to editing details. Like this:
-	>
-	let g:desc_dateformat = "%a %d %b %Y"
-	<
+  in a similar way to editing details. Like this:
+  >
+  let g:desc_dateformat = "%a %d %b %Y"
+  <
 
 --FILETYPES                                               *desc.vim filetypes*
   The |User| CommentaryPost autocommand fires after
-	a sucessful operation, and can be used for more
-	advanced customization. For example: 
-	>
-	autocmd FileType apache setlocal commentstring=#\ %s
-	<
+  a sucessful operation, and can be used for more
+  advanced customization. For example: 
+  >
+  autocmd FileType apache setlocal commentstring=#\ %s
+  <
 ==============================================================================
 
 vim:tw=78:et:ft=help:norl:
