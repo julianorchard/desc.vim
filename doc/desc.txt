@@ -1,7 +1,54 @@
-*desc.txt*  Plugin to add descriptions to files (probably for personal use only).
+*desc.txt*                                Plugin to add descriptions to files.
 
-Author:  Julian Orchard <julianorchard.co.uk>
-License: Same terms as Vim itself (see |license|)
+Author:      Julian Orchard <hello@julianorchard.co.uk>
+Repository:  https://github.com/julianorchard/desc.vim
+License:     Same terms as Vim itself (see |license|).
 
+==============================================================================
+INSTALL                                                     *desc.vim install* 
 
+Install the files into the Vim runtime directory, which is usually '~/.vim',
+or  '$HOME/vimfiles' on Windows.
 
+If you install using pathogen, extract files into the 'bundle' directory.
+
+==============================================================================
+USAGE                                                         *desc.vim usage*
+
+This plugin is designed to be flexible in how you use it. 
+
+To try it out, and see how it works by default, open a new file and type 
+'desc' in |insert| mode. 
+
+==============================================================================
+CUSTOMIZATION                                             *desc.vim customize*
+
+There are some vital (and not so vital) ways you will want to customize how
+this plugin operates. 
+
+--DETAILS                                                   *desc.vim details*
+  You will want to include your contact information
+	instead of the standard placeholder details. Set
+	the following variable in your main vim config
+	file like so: 
+  > 
+	let g:desc_author = "Your Name <example@email.com>"
+  <
+
+--DATE/TIME                                               *desc.vim date time*
+  You can also change how the date/time is shown,
+	in a similar way to editing details. Like this:
+	>
+	let g:desc_dateformat = "%a %d %b %Y"
+	<
+
+--FILETYPES                                               *desc.vim filetypes*
+  The |User| CommentaryPost autocommand fires after
+	a sucessful operation, and can be used for more
+	advanced customization. For example: 
+	>
+	autocmd FileType apache setlocal commentstring=#\ %s
+	<
+==============================================================================
+
+vim:tw=78:et:ft=help:norl:
