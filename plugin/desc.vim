@@ -1,59 +1,97 @@
-
 "  File:       desc.vim
 "  Author:     Julian Orchard [hello@julianorchard.co.uk]
 "  Tag Added:  2022-02-15
 "  Desciption: Add a short comment block to files (this!)
 
+if exists("g:loaded_desc") || v:version < 700
+	finish
+endif
+let g:loaded_desc = 1
 
-" Method inspired by commentary.vim 
+" Method changed slightly from vim-commentary
 " https://github.com/tpope/vim-commentary
 	function! s:comments() abort
 		return split(get(b:, 'commentary_format', 
-					\ &commentstring), '%s', 1)
+					\substitute(&commentstring, '^$', '%s', '')), '%s', 1)
 	endfunction
 
-" Write Block Comment Style
-	function! s:block(l,r) abort
-		let [l,r] = [a:l, a:r]
-			iab <expr> desc l . 
-				\   "<cr>File:       " . filename 
-				\ . "<cr>Author:     " . author
-				\	. "<cr>Tag Added:  " . datestr
-				\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
-				\ . "<esc>/DESCRIPTION<cr>cw"
-	endfunction
-
+" Wed 9-Mar-22 03:15 PM ~ JO : 
+"   Needs tidying up, but works for now
+" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 " Write Single Line Comment Style
-	function! s:line(l,r) abort
-		let [l,r] = [a:l, a:r]
-			iab <expr> desc l." File:       " . filename 
-			     \ . "<cr>".l." Author:     " . author
-			     \ . "<cr>".l." Tag Added:  " . datestr
-			     \ . "<cr>".l." Desciption:"
+	function! s:writeiab(l,r) abort
+	" Redefine Left Comment Char
+		let [l,r] = [a:l,a:r]
+		if exists('g:desc_dateformat')
+			let datestr = strftime(get(g:, 'desc_dateformat'))
+		else
+			" Default YYYY-mm-dd
+			let datestr = strftime("%Y-%m-%d")
+		endif
+		" 3 = List, 1 = Str
+		if type(g:desc_author) == 3
+			for i in g:desc_author
+			" Get Keyword and Signature
+				let keyword = get(i, 0, "NONE") 
+				let signature = get(i, 1, "NONE")
+				if len(r) != 0
+					" Right and Left Char Comments
+					exec 'autocmd FileType * iab' keyword . " " l  
+					    \ . "<cr> File:       " . expand('%:t')
+							\ . "<cr>Tag Added:  " . datestr
+							\ . "<cr>Author:     " . signature
+							\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+							\ . "<esc>/DESCRIPTION<cr>cw"
+				else 
+					" Single Line Comments
+					exec 'autocmd FileType * iab' keyword . " " l 
+					               \." File:       " . expand('%:t')
+							\ . "<cr>".l." Tag Added:  " . datestr
+							\ . "<cr>".l." Author:     " . signature
+							\ . "<cr>".l." Desciption:"
+				endif 
+			endfor
+		elseif exists("g:desc_author") && type(g:desc_author) == 1
+		" If Str
+			let author = get(g:, "desc_author")
+			if len(r) != 0
+				" Right and Left Char Comments
+				exec 'autocmd FileType * iab' "desc " l 
+				    \ . "<cr> File:       " . expand('%:t')
+						\  . "<cr>Tag Added:  " . datestr
+						\  . "<cr>Author:     " . author
+						\  . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+						\ . "<esc>/DESCRIPTION<cr>cw"
+			else 
+				" Single Line Comments
+				exec 'autocmd FileType * iab' "desc " l 
+ 				               \." File:       " . expand('%:t')
+						\ . "<cr>".l." Tag Added:  " . datestr
+						\ . "<cr>".l." Author:     " . author
+						\ . "<cr>".l." Desciption:"
+			endif 
+		else 
+			if len(r) != 0
+				" Right and Left Char Comments
+				exec 'autocmd FileType * iab' "desc " l \ 
+							. "<cr> File:       " . expand('%:t')
+						\ . "<cr>Tag Added:  " . datestr
+						\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+						\ . "<esc>/DESCRIPTION<cr>cw"
+			else 
+				" Single Line Comments
+				exec 'autocmd FileType * iab' "desc " l 
+ 											\." File:       " . expand('%:t')
+						\ . "<cr>".l." Tag Added:  " . datestr
+						\ . "<cr>".l." Desciption:"
+			endif 
+		endif 
 	endfunction
+" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
 " Author from a config file, eventually
 " Update curtime to override with a BufSave?
-	let filename = expand('%:t')
-" Author
-	if exists('g:desc_author') 
-		let author = get(g:, 'desc_author')
-	else 
-		"default
-		let author = "Placeholder <example@placeholder.com>"
-	endif
-" Date Format
-	if exists('g:desc_dateformat')
-		let datestr = strftime(get(g:, 'desc_dateformat'))
-	else
-		"default
-		let datestr = strftime("%Y-%m-%d")
-	endif
 
+" Get Comment Char, Call Accordingly
 	let [l,r] = s:comments()
-	if len(r) != 0 
-		call s:block(l,r)
-	else 
-		call s:line(l,r)
-	endif
-
+	call s:writeiab(l,r)
