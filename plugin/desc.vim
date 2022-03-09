@@ -71,9 +71,14 @@
 		let datestr = strftime("%Y-%m-%d")
 	endif
 
+" Wed 9-Mar-22 01:10 PM ~ JO : 
+" loop through length of index, getting all elements, 
+" then loop through them again when it comes to the 
+" iabbreviation part
 	let author = get(desc_shortcut, 0, "")
+	let a = get(desc_shortcut, 0, "")
 	let shortcut = get(desc_shortcut, 1, "")
-	echo author
+	echo a
 	echo shortcut
 
 	let [l,r] = s:comments()
