@@ -5,23 +5,13 @@ started. Output roughly looks like this by default:
 
 ```
 <!-- 
-	File:       test.html
-	Author:     Julian Orchard <hello@julianorchard.co.uk>
-	Tag Added:  2022-02-16
-	Desciption: Example of a file description.
+File:       test.html
+Tag Added:  2022-02-16
+Desciption: Example of a file description.
 -->
 ```
 
-And, as an example of a single line comment style block of description...
-
-```
-# File:       test.sh
-# Author:     Julian Orchard <hello@julianorchard.co.uk>
-# Tag Added:  2022-02-16
-# Desciption: Another example, this time using line comments.
-```
-
-Inspired by [commentary](https://github.com/tpope/vim-commentary).
+Method for attaining the comment character is heavily influenced by [vim-commentary](https://github.com/tpope/vim-commentary).
 
 ## Installation
 
@@ -35,13 +25,41 @@ Using a vim plugin manager (my favourite being [vim-plug](https://github.com/jun
 There are some vital (and not so vital) customisations that need to be made!
 Most vital is...
 
-### Your Details
+### Your Details/Signature
 
 You'll want to use your own name as the Author (I assume). To do so, add a line
 in your `.vimrc` file like this:
 
 ```
-	let g:desc_author = "Your Name <example@email.com>"
+	let g:desc_author = "Example <example@email.com>"
+```
+
+This will give you something like this: 
+
+```
+<!--
+File:       README.md
+Author:     Example <example@email.com>
+Tag Added:  2022-03-09
+Desciption: Another example description.
+-->
+```
+
+### Change Keyword / Multi-Signature Support
+
+Change the keyword that triggers the description adding by converting the
+variable you just definied to a list. This will look like this: 
+
+```
+" Use 'descrip' instead of 'desc' at trigger
+	let g:desc_author = [["descrip", "Example <example@email.com>"]]
+```
+
+To add multiple descriptions, just keep adding to the list, like so: 
+
+```
+	let g:desc_author = [["desc",    "Example <example@email.com>"],
+	                    \["descrip", "Another Example <another@email.com>"]]
 ```
 
 ### Custom Date/Time
