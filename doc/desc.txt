@@ -33,23 +33,39 @@ this plugin operates.
   instead of the standard placeholder details. Set
   the following variable in your main vim config
   file like so: 
-  
-  > let g:desc_author = "Your Name <example@email.com>" <
+>
+  let g:desc_author = "Your Name <example@email.com>"
+<
+
+  You can also redefine the desc keyword, in this
+  manner: 
+>
+  let g:desc_author = [["descript", "Your Name <example@email.com>"]]
+<
+  And you can use the creation of lists, similarly,
+  to define multiple descriptions to add...
+
+>
+  let g:desc_author = [["desc", "Your Name <example@email.com>"],
+                      \["aesc", "Another <another@email.com>"]]
+<
 
 --DATE TIME                                                     *DescDateTime*
 
   You can also change how the date/time is shown,
   in a similar way to editing details. Like this:
-
-  > let g:desc_dateformat = "%a %d %b %Y <
+>
+  let g:desc_dateformat = "%a %d %b %Y
+<
 
 --FILETYPES                                           *DescFt* | *DescFileType*
 
   The |User| CommentaryPost autocommand fires after
   a sucessful operation, and can be used for more
   advanced customization. For example: 
-
-  > autocmd FileType apache setlocal commentstring=#\ %s <
+>
+  autocmd FileType apache setlocal commentstring=#\ %s
+<
 ==============================================================================
 
 vim:tw=78:et:ft=help:norl:

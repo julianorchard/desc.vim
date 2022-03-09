@@ -3,11 +3,16 @@
 "  Tag Added:  2022-02-15
 "  Desciption: Add a short comment block to files (this!)
 
-" Method inspired by commentary.vim 
+if exists("g:loaded_desc") || v:version < 700
+	finish
+endif
+let g:loaded_desc = 1
+
+" Method changed slightly from vim-commentary
 " https://github.com/tpope/vim-commentary
 	function! s:comments() abort
 		return split(get(b:, 'commentary_format', 
-					\ &commentstring), '%s', 1)
+					\substitute(&commentstring, '^$', '%s', '')), '%s', 1)
 	endfunction
 
 " Wed 9-Mar-22 03:15 PM ~ JO : 
@@ -31,16 +36,16 @@
 				let signature = get(i, 1, "NONE")
 				if len(r) != 0
 					" Right and Left Char Comments
-					exec 'autocmd FileType * iab' keyword . " " l \ 
-								. "<cr> File:       " . expand('%:t')
-							\ . "<cr> Tag Added:  " . datestr
-							\ . "<cr> Author:     " . signature
-							\ . "<cr> Desciption:DESCRIPTION<cr><esc>0i" . r 
+					exec 'autocmd FileType * iab' keyword . " " l  
+					    \ . "<cr> File:       " . expand('%:t')
+							\ . "<cr>Tag Added:  " . datestr
+							\ . "<cr>Author:     " . signature
+							\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 							\ . "<esc>/DESCRIPTION<cr>cw"
 				else 
 					" Single Line Comments
 					exec 'autocmd FileType * iab' keyword . " " l 
-												\." File:       " . expand('%:t')
+					               \." File:       " . expand('%:t')
 							\ . "<cr>".l." Tag Added:  " . datestr
 							\ . "<cr>".l." Author:     " . signature
 							\ . "<cr>".l." Desciption:"
@@ -51,16 +56,16 @@
 			let author = get(g:, "desc_author")
 			if len(r) != 0
 				" Right and Left Char Comments
-				exec 'autocmd FileType * iab' "desc " l \ 
-							. "<cr> File:       " . expand('%:t')
-						\ . "<cr> Tag Added:  " . datestr
-						\ . "<cr> Author:     " . author
-						\ . "<cr> Desciption:DESCRIPTION<cr><esc>0i" . r 
+				exec 'autocmd FileType * iab' "desc " l 
+				    \ . "<cr> File:       " . expand('%:t')
+						\  . "<cr>Tag Added:  " . datestr
+						\  . "<cr>Author:     " . author
+						\  . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 						\ . "<esc>/DESCRIPTION<cr>cw"
 			else 
 				" Single Line Comments
 				exec 'autocmd FileType * iab' "desc " l 
- 											\." File:       " . expand('%:t')
+ 				               \." File:       " . expand('%:t')
 						\ . "<cr>".l." Tag Added:  " . datestr
 						\ . "<cr>".l." Author:     " . author
 						\ . "<cr>".l." Desciption:"
@@ -70,8 +75,8 @@
 				" Right and Left Char Comments
 				exec 'autocmd FileType * iab' "desc " l \ 
 							. "<cr> File:       " . expand('%:t')
-						\ . "<cr> Tag Added:  " . datestr
-						\ . "<cr> Desciption:DESCRIPTION<cr><esc>0i" . r 
+						\ . "<cr>Tag Added:  " . datestr
+						\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 						\ . "<esc>/DESCRIPTION<cr>cw"
 			else 
 				" Single Line Comments
