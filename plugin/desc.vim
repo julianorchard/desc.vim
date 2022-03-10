@@ -8,26 +8,41 @@ if exists("g:loaded_desc") || v:version < 700
 endif
 let g:loaded_desc = 1
 
-" Method changed slightly from vim-commentary
-" https://github.com/tpope/vim-commentary
-	function! s:comments() abort
-		return split(get(b:, 'commentary_format', 
-					\substitute(&commentstring, '^$', '%s', '')), '%s', 1)
-	endfunction
+	function! s:Iab() abort 
+		if len(r) != 0
+			" Right and Left Char Comments
+			exec 'autocmd FileType * iab' keyword . " " l  
+					\ . "<cr> File:       " . expand('%:t')
+					\ . "<cr>Tag Added:  " . datestr
+					\ . "<cr>Author:     " . signature
+					\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+					\ . "<esc>/DESCRIPTION<cr>cw"
+		else 
+			" Single Line Comments
+			exec 'autocmd FileType * iab' keyword . " " l 
+											\." File:       " . expand('%:t')
+					\ . "<cr>".l." Tag Added:  " . datestr
+					\ . "<cr>".l." Author:     " . signature
+					\ . "<cr>".l." Desciption:"
+		endif 
+	endfunction 
 
-" Wed 9-Mar-22 03:15 PM ~ JO : 
-"   Needs tidying up, but works for now
-" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 " Write Single Line Comment Style
-	function! s:writeiab(l,r) abort
-	" Redefine Left Comment Char
-		let [l,r] = [a:l,a:r]
+	function! s:Main() abort
+
+	" Method changed slightly from vim-commentary
+	" https://github.com/tpope/vim-commentary
+		let [l,r] = split(get(b:, 'commentary_format', 
+			\substitute(&commentstring, '^$', '%s', '')), '%s', 1)
+
+	" Check if desc_dateformat, otherwise use Default (below)
 		if exists('g:desc_dateformat')
 			let datestr = strftime(get(g:, 'desc_dateformat'))
 		else
-			" Default YYYY-mm-dd
+		" Default = YYYY-mm-dd
 			let datestr = strftime("%Y-%m-%d")
 		endif
+
 		" 3 = List, 1 = Str
 		if type(g:desc_author) == 3
 			for i in g:desc_author
@@ -87,11 +102,12 @@ let g:loaded_desc = 1
 			endif 
 		endif 
 	endfunction
-" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-" Author from a config file, eventually
-" Update curtime to override with a BufSave?
-
-" Get Comment Char, Call Accordingly
-	let [l,r] = s:comments()
-	call s:writeiab(l,r)
+" Call Main Function on AutoCmd 
+	augroup DESCMAIN
+		autocmd!
+		autocmd FileType,BufEnter,BufRead * echo expand('%:t')
+		"BufReadPre  FileType,BufReadPre,FileReadPre
+		autocmd FileType,BufRead,BufEnter * call s:Main()
+	augroup END
+	
