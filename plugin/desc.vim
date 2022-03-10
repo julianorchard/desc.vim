@@ -29,6 +29,7 @@ let g:loaded_desc = 1
 
 " Write Single Line Comment Style
 	function! s:Main() abort
+		echo "Changed Comment Type, For File " . expand('%:t')
 
 	" Method changed slightly from vim-commentary
 	" https://github.com/tpope/vim-commentary
@@ -42,6 +43,7 @@ let g:loaded_desc = 1
 		" Default = YYYY-mm-dd
 			let datestr = strftime("%Y-%m-%d")
 		endif
+		echo datestr
 
 		" 3 = List, 1 = Str
 		if type(g:desc_author) == 3
@@ -50,6 +52,11 @@ let g:loaded_desc = 1
 				let keyword = get(i, 0, "NONE") 
 				let signature = get(i, 1, "NONE")
 				if len(r) != 0
+
+					exec 'autocmd FileType * una' keyword
+
+					echo "Array, Left and Right Char"
+
 					" Right and Left Char Comments
 					exec 'autocmd FileType * iab' keyword . " " l  
 					    \ . "<cr> File:       " . expand('%:t')
@@ -58,6 +65,10 @@ let g:loaded_desc = 1
 							\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 							\ . "<esc>/DESCRIPTION<cr>cw"
 				else 
+
+				exec 'autocmd FileType * una' keyword
+				echo "Array, Left Only"
+
 					" Single Line Comments
 					exec 'autocmd FileType * iab' keyword . " " l 
 					               \." File:       " . expand('%:t')
@@ -70,7 +81,12 @@ let g:loaded_desc = 1
 		" If Str
 			let author = get(g:, "desc_author")
 			if len(r) != 0
+				una desc
+
 				" Right and Left Char Comments
+
+				echo "String, Left and Right Char"
+
 				exec 'autocmd FileType * iab' "desc " l 
 				    \ . "<cr> File:       " . expand('%:t')
 						\  . "<cr>Tag Added:  " . datestr
@@ -78,6 +94,10 @@ let g:loaded_desc = 1
 						\  . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 						\ . "<esc>/DESCRIPTION<cr>cw"
 			else 
+
+						una desc
+				echo "String, Left Only"
+
 				" Single Line Comments
 				exec 'autocmd FileType * iab' "desc " l 
  				               \." File:       " . expand('%:t')
@@ -86,7 +106,10 @@ let g:loaded_desc = 1
 						\ . "<cr>".l." Desciption:"
 			endif 
 		else 
+
+			echo "Shouldn't be this one..."
 			if len(r) != 0
+				una desc
 				" Right and Left Char Comments
 				exec 'autocmd FileType * iab' "desc " l \ 
 							. "<cr> File:       " . expand('%:t')
@@ -94,7 +117,8 @@ let g:loaded_desc = 1
 						\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 						\ . "<esc>/DESCRIPTION<cr>cw"
 			else 
-				" Single Line Comments
+				una desc
+			" Single Line Comments
 				exec 'autocmd FileType * iab' "desc " l 
  											\." File:       " . expand('%:t')
 						\ . "<cr>".l." Tag Added:  " . datestr
@@ -106,8 +130,7 @@ let g:loaded_desc = 1
 " Call Main Function on AutoCmd 
 	augroup DESCMAIN
 		autocmd!
-		autocmd BufNew,BufFilePost * echo expand('%:t')
+"	autocmd FileType,BufEnter,BufRead * echo expand('%:t')
 		"BufReadPre  FileType,BufReadPre,FileReadPre
-		autocmd BufNew,BufFilePost * call s:Main()
+		autocmd BufNew,BufRead * call s:Main()
 	augroup END
-	
