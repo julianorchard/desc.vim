@@ -106,8 +106,8 @@ let g:loaded_desc = 1
 " Call Main Function on AutoCmd 
 	augroup DESCMAIN
 		autocmd!
-		autocmd FileType,BufEnter,BufRead * echo expand('%:t')
+		autocmd BufNew,BufFilePost * echo expand('%:t')
 		"BufReadPre  FileType,BufReadPre,FileReadPre
-		autocmd FileType,BufRead,BufEnter * call s:Main()
+		autocmd BufNew,BufFilePost * call s:Main()
 	augroup END
 	
