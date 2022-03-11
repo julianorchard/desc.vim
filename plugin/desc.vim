@@ -15,7 +15,6 @@
 		let keyword = a:keyword
 		let signature = a:signature
 		let datetime = a:datetime
-"	echo l . " and " . r . " and " . keyword . " and " . signature . " and " . datetime
 		if len(r) != 0
 			" Right and Left Char Comments
 			if signature != ""
@@ -55,13 +54,20 @@
 
 "  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+- 
 " MAIN
-	function! s:Main() abort
+	function! s:Main(gitdetails) abort
 
 	" GET COMMENT CHARS
 		" Method changed from vim-commentary
 		" https://github.com/tpope/vim-commentary
 			let [l,r] = split(get(b:, 'commentary_format', 
 						\substitute(&commentstring, '^$', '%s', '')), '%s', 1)
+
+		" Try / Catch Desc_Author
+			try 
+				let sign = g:desc_author
+			catch
+				let signature = a:gitdetails			
+			endtry
 
 	" GET DATE STRING
 		" Check if desc_dateformat, otherwise use Default (below)
@@ -74,7 +80,7 @@
 
 	" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~--~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 		" IF LIST (Type 3)
-			if type(g:desc_author) == 3
+			if type('sign') == 3
 				for i in g:desc_author
 				" Get Keyword and Signature
 					let keyword = get(i, 0, "NONE") 
@@ -94,7 +100,7 @@
 	" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~--~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 		" DEFAULT, no String or List Defined
 			else 
-					let signature = ""
+					let keyword = "desc"
 					call s:SetIAB(l, r, keyword, signature, datetime)
 			endif 
 
@@ -103,8 +109,13 @@
 
 "  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+- 
 " CALL MAIN ON AUTOCMD
+	try 
+		let gitdetails = substitute(system('git config --global user.name') . " <" . 
+								\system('git config --global user.email') . ">", '\n', '', 'g') 
+	catch
+		let gitdetails = ""
+	endtry
 	augroup DESCMAIN
 		autocmd!
-		autocmd! VimEnter,InsertEnter * call s:Main()
+		autocmd! VimEnter,InsertEnter * call s:Main(gitdetails)
 	augroup END
-	

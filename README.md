@@ -4,12 +4,20 @@ Tag files with descriptions, date, author, and more! Type `desc` to get
 started. Output roughly looks like this by default: 
 
 ```
-<!-- 
-File:       test.html
-Tag Added:  2022-02-16
-Desciption: Example of a file description.
+<!--
+File:       README.md
+Author:     julianorchard <hello@julianorchard.co.uk>
+Tag Added:  2022-03-11
+Desciption: This is an example description.
 -->
 ```
+
+By default, it pulls your Git user.name and user.email global variables to use
+as the Author part of the tag, but this can be [customized](#Customization).
+
+Additionally, you can [change the
+keyword](#change-keyword--multi-signature-support) that triggers the description to be
+inserted, and you can add multiple signatures in this way too. 
 
 Method for attaining the comment character is heavily influenced by [vim-commentary](https://github.com/tpope/vim-commentary).
 
@@ -20,15 +28,14 @@ Using a vim plugin manager (my favourite being [vim-plug](https://github.com/jun
 1. Add `Plug 'julianorchard/desc.vim'` to your `.vimrc` file
 2. Run `:PlugInstall` 
 
-## Customisation
+## Customization
 
-There are some vital (and not so vital) customisations that need to be made!
-Most vital is...
+There are some important customizations that can be made, especially if you're
+not using Git.
 
 ### Your Details/Signature
 
-You'll want to use your own name as the Author (I assume). To do so, add a line
-in your `.vimrc` file like this:
+Add a line in your `.vimrc` file like this:
 
 ```
 let g:desc_author = "Example <example@email.com>"
