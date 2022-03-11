@@ -31,7 +31,7 @@ You'll want to use your own name as the Author (I assume). To do so, add a line
 in your `.vimrc` file like this:
 
 ```
-	let g:desc_author = "Example <example@email.com>"
+let g:desc_author = "Example <example@email.com>"
 ```
 
 This will give you something like this: 
@@ -52,14 +52,14 @@ variable you just definied to a list. This will look like this:
 
 ```
 " Use 'descrip' instead of 'desc' at trigger
-	let g:desc_author = [["descrip", "Example <example@email.com>"]]
+  let g:desc_author = [["descrip", "Example <example@email.com>"]]
 ```
 
 To add multiple descriptions, just keep adding to the list, like so: 
 
 ```
-	let g:desc_author = [["desc",    "Example <example@email.com>"],
-	                    \["descrip", "Another Example <another@email.com>"]]
+let g:desc_author = [["desc",    "Example <example@email.com>"],
+                    \["descrip", "Another Example <another@email.com>"]]
 ```
 
 ### Custom Date/Time
@@ -69,7 +69,7 @@ description;
 
 ```
 " This prints the date like Wed 16 Feb 2022
-	let g:desc_dateformat = "%a %d %b %Y"
+  let g:desc_dateformat = "%a %d %b %Y"
 ```
 
 The default for this is `%Y-%m-%d`, or yyyy-mm-dd.
