@@ -12,45 +12,40 @@
 " SETIAB
 	function! s:SetIAB(l, r, keyword, signature, datetime) abort 
 		let [l,r] = [a:l,a:r]
-		let keyword = a:keyword
-		let signature = a:signature
-		let datetime = a:datetime
-		if len(r) != 0
-			" Right and Left Char Comments
-			if signature != ""
-				" With Signature
-				exec 'autocmd! InsertEnter * iab' keyword . " " l  
+		if a:signature != ""
+      " Signature
+			if len(r) != 0
+				exec 'autocmd VimEnter,InsertEnter * iab' a:keyword . " " l  
 						\ . "<cr> File:       " . expand('%:t')
-						\ . "<cr>Author:     " . signature
-						\ . "<cr>Tag Added:  " . datetime
+						\ . "<cr>Author:     " . a:signature
+						\ . "<cr>Tag Added:  " . a:datetime
 						\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
 						\ . "<esc>?DESCRIPTION<cr>cw"
+        return
 			else 
-				" Without Signature
-				exec 'autocmd! InsertEnter * iab' keyword . " " l  
-						\ . "<cr> File:       " . expand('%:t')
-						\ . "<cr>Tag Added:  " . datetime
-						\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
-						\ . "<esc>?DESCRIPTION<cr>cw"
+				exec 'autocmd InsertEnter * iab' a:keyword . " " l 
+												\." File:       " . expand('%:t')
+            \ . "<cr>".l." Author:     " . a:signature
+						\ . "<cr>".l." Tag Added:  " . a:datetime
+						\ . "<cr>".l." Desciption:"
+        return
 			endif 
 		else 
-			" Single Line Comments
-			if signature != ""
-				" With Signature
-				exec 'autocmd! InsertEnter * iab' keyword . " " l 
-												\." File:       " . expand('%:t')
-						\ . "<cr>".l." Author:     " . signature
-						\ . "<cr>".l." Tag Added:  " . datetime
-						\ . "<cr>".l." Desciption:"
+      " Without
+				exec 'autocmd VimEnter,InsertEnter * iab' a:keyword . " " l  
+						\ . "<cr> File:       " . expand('%:t')
+						\ . "<cr>Tag Added:  " . a:datetime
+						\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+						\ . "<esc>?DESCRIPTION<cr>cw"
 			else
-				" Without Signature
-				exec 'autocmd! InsertEnter * iab' keyword . " " l 
+				exec 'autocmd InsertEnter * iab' a:keyword . " " l 
 												\." File:       " . expand('%:t')
-						\ . "<cr>".l." Tag Added:  " . datetime
+						\ . "<cr>".l." Tag Added:  " . a:datetime
 						\ . "<cr>".l." Desciption:"
 			endif 
 		endif 
 	endfunction 
+
 
 "  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+-  -+- 
 " MAIN
@@ -62,13 +57,6 @@
 			let [l,r] = split(get(b:, 'commentary_format', 
 						\substitute(&commentstring, '^$', '%s', '')), '%s', 1)
 
-		" Try / Catch Desc_Author
-			try 
-				let sign = g:desc_author
-			catch
-				let signature = a:gitdetails			
-			endtry
-
 	" GET DATE STRING
 		" Check if desc_dateformat, otherwise use Default (below)
 			if exists('g:desc_dateformat')
@@ -78,10 +66,18 @@
 				let datetime = strftime("%Y-%m-%d")
 			endif
 
+  " GET DESC_AUTHOR 
+		" Try / Catch Desc_Author
+			" try 
+        " let l:sign = get(g:, 'desc_author')
+      " catch
+        " let signature = a:gitdetails
+			" endtry
+
 	" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~--~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 		" IF LIST (Type 3)
-			if type('sign') == 3
-				for i in g:desc_author
+			if type(g:desc_author) == type([])
+				for i in get(g:, 'desc_author')
 				" Get Keyword and Signature
 					let keyword = get(i, 0, "NONE") 
 					let signature = get(i, 1, "NONE")
@@ -91,7 +87,7 @@
 
 	" -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~--~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 		" IF STRING (Type 1)
-			elseif exists("g:desc_author") && type(g:desc_author) == 1
+			elseif exists("g:desc_author") && type("g:desc_author") == 1
 				let keyword = "desc"
 				let signature = get(g:, "desc_author")
 			" Call Set iabbrev Function
@@ -101,6 +97,7 @@
 		" DEFAULT, no String or List Defined
 			else 
 					let keyword = "desc"
+          let signature = a:gitdetails
 					call s:SetIAB(l, r, keyword, signature, datetime)
 			endif 
 
