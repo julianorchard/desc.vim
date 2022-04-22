@@ -1,7 +1,7 @@
-"  File:       desc.vim
-"  Author:     Julian Orchard <hello@julianorchard.co.uk>
-"  Tag Added:  2022-02-15
-"  Desciption: Add a short comment block to files (this!)
+"  File:        desc.vim
+"  Author:      Julian Orchard <hello@julianorchard.co.uk>
+"  Tag Added:   2022-02-15
+"  Description: Add a short comment block to files (this!)
 
 if exists("g:loaded_desc") || v:version < 700
 	finish
@@ -14,42 +14,42 @@ function! s:SetIAB(l, r, keyword, signature, datetime) abort
 	let [l,r] = [a:l,a:r]
 	if a:signature != ""
      " Detect if comments are going to be inserted automatically or not
-      	let fo = &fo
-	if stridx(fo,"c") == -1 && stridx(fo,"r") == -1 && stridx(fo,"o") == -1
-		let lc = l . "  "
-	else
-		let lc = ""
-	endif
+      let fo = &fo
+      if stridx(fo,"c") == -1 && stridx(fo,"r") == -1 && stridx(fo,"o") == -1
+        let lc = l . "  "
+      else
+        let lc = ""
+      endif
 
      " With Signature
 		if len(r) != 0
 			exec 'autocmd VimEnter,InsertEnter * iab' a:keyword . " " l  
-					\ . "<cr> File:       " . expand('%:t')
-					\ . "<cr>Author:     " . a:signature
-					\ . "<cr>Tag Added:  " . a:datetime
-					\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+					\ . "<cr> File:        " . expand('%:t')
+					\ . "<cr>Author:      " . a:signature
+					\ . "<cr>Tag Added:   " . a:datetime
+					\ . "<cr>Description:DESCRIPTION<cr><esc>0i" . r 
 					\ . "<esc>?DESCRIPTION<cr>cw"
 			return
 		else 
 			exec 'autocmd InsertEnter * iab' a:keyword . " " l 
-					\."  File:       " . expand('%:t')
-    					\ . "<cr>".lc."Author:     " . a:signature
-					\ . "<cr>".lc."Tag Added:  " . a:datetime
-					\ . "<cr>".lc."Desciption:"
+					\ .         "  File:        " . expand('%:t')
+          \ . "<cr>".lc."Author:      " . a:signature
+					\ . "<cr>".lc."Tag Added:   " . a:datetime
+					\ . "<cr>".lc."Description:"
 			return
 		endif 
 	else 
       " Without
 			exec 'autocmd VimEnter,InsertEnter * iab' a:keyword . " " l  
 					\ . "<cr> File:       " . expand('%:t')
-					\ . "<cr>Tag Added:  " . a:datetime
-					\ . "<cr>Desciption:DESCRIPTION<cr><esc>0i" . r 
+					\ . "<cr>Tag Added:   " . a:datetime
+					\ . "<cr>Description:DESCRIPTION<cr><esc>0i" . r 
 					\ . "<esc>?DESCRIPTION<cr>cw"
 		else
 			exec 'autocmd InsertEnter * iab' a:keyword . " " l 
-					\."  File:       " . expand('%:t')
-					\ . "<cr>".lc."Tag Added:  " . a:datetime
-					\ . "<cr>".lc."Desciption:"
+					\ .         "  File:        " . expand('%:t')
+					\ . "<cr>".lc."Tag Added:   " . a:datetime
+					\ . "<cr>".lc."Description:"
 		endif 
 	endif 
 endfunction 
@@ -74,8 +74,8 @@ function! s:Main(gitdetails) abort
 			let datetime = strftime("%Y-%m-%d")
 		endif
 
-  " GET DESC_AUTHOR 
-	" Try / Catch Desc_Author
+" GET DESC_AUTHOR 
+  " Try / Catch Desc_Author
 		try 
 			let sign = get(g:, 'desc_author')
 		catch
