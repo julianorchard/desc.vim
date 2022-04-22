@@ -5,10 +5,10 @@ started. Output roughly looks like this by default:
 
 ```
 <!--
-File:       README.md
-Author:     julianorchard <hello@julianorchard.co.uk>
-Tag Added:  2022-03-11
-Desciption: This is an example description.
+File:        README.md
+Author:      julianorchard <hello@julianorchard.co.uk>
+Tag Added:   2022-03-11
+Description: This is an example description.
 -->
 ```
 
@@ -45,10 +45,10 @@ This will give you something like this:
 
 ```
 <!--
-File:       README.md
-Author:     Example <example@email.com>
-Tag Added:  2022-03-09
-Desciption: Another example description.
+File:        README.md
+Author:      Example <example@email.com>
+Tag Added:   2022-03-09
+Description: Another example description.
 -->
 ```
 
